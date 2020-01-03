@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style type="text/css">
+	table tr:nth-of-type(odd) {
+	 background: #eee;
+	}
+	 
+	/* Automatic Serial Number Row */
+	.doctable {
+	 counter-reset: serial-number; /* Set the serial number counter to 0 */
+	}
+	.doctable td:first-child:before {
+	 counter-increment: serial-number; /* Increment the serial number counter */
+	 content: counter(serial-number); /* Display the counter */
+	}
+</style>
+	<div class=" p-4 mb-4">
+	    <form method="POST" enctype="multipart/form-data">
+
+	    	{% csrf_token %}
+	    	<fieldset class="form-group">
+	    		<h3 class="">Upload your document -</h3><hr>
+	    		{{ form|crispy }}
+		    </fieldset>
+	    	<div class="form-group">
+	              <button class="btn btn-lg btn-success" type="submit">Upload</button>
+	        </div>
+	    </form>
+	</div>
+    
+    <h3 class="text-secondary">This Week's documents</h3><hr>
+    <table class="doctable table mt-4">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th scope="col">#</th>
+	      <th scope="col">About</th>
+	      <th scope="col">Document</th>
+	      <th scope="col">Date</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for doc in documents %}
+	    <tr>
+	      <td scope="row"></td>
+	      <td>{{ doc.about }}</td>
+	      <td><a href="{{ doc.file.url }}" target="_blank">Download Document</a></td>
+	      <td>{{ doc.date_posted }}</td>
+	    </tr>
+	    {% endfor %}
+	  </tbody>
+	</table>
+
+{% endblock content %}
